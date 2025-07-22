@@ -2,12 +2,13 @@ from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import UserSerializer, RegisterSerializer
+from ..serializers import UserSerializer
 from django.shortcuts import get_object_or_404
-from rest_framework.permissions import AllowAny
-
+from rest_framework.permissions import IsAuthenticated
+from user.permissions import IsOwnerOrReadOnly
 
 class UserAPIView(APIView):
+    permission_classes = [IsOwnerOrReadOnly]
     def get(self, request):
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
@@ -41,11 +42,3 @@ class UserAPIView(APIView):
         user = get_object_or_404(User, id=request.data.get('id'))
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-class RegisterAPIView(APIView):
-    permission_classes = [AllowAny] 
-    def post(self, request):
-        serializer = RegisterSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"message": "User registered successfully."}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
