@@ -11,13 +11,14 @@ from django.shortcuts import get_object_or_404
 class ProductAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     def get(self, request, pk=None):
-        if pk:
-            product = get_object_or_404(Product, pk=pk)
+        if pk is not None:
+            product = get_object_or_404(Product, pk=pk, created_by=request.user)
             serializer = ProductSerializer(product)
         else:
             products = Product.objects.filter(created_by=request.user)
             serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
+
 
     def post(self, request):
         serializer = ProductSerializer(data=request.data)
