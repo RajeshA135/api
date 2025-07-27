@@ -145,3 +145,5 @@ SIMPLE_JWT = {
 
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
+# settings.py
+AUTH_USER_MODEL = 'user.CustomUser'

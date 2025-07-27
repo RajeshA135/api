@@ -1,3 +1,4 @@
 from .products import Product
 from .organization import Organization  
-from .role import Role
+from .roles import Role
+from .users import CustomUser
