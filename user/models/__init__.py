@@ -1,2 +1,3 @@
 from .products import Product
-from .Organization import Organization  # <--- add this line
+from .organization import Organization  
+from .role import Role

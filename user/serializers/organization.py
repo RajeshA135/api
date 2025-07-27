@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from ..models.Organization import Organization
-class ProductSerializer(serializers.ModelSerializer):
+from ..models.organization import Organization
+class OrganizationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Organization
