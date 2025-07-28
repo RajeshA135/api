@@ -1,6 +1,6 @@
 # create role serializer
 from rest_framework import serializers
-from ..models.role import Role
+from ..models.roles import Role
 class RoleSerializer(serializers.ModelSerializer):
     class Meta:
         model= Role

@@ -4,10 +4,10 @@ from ..models.roles import Role  # Adjust import path as per your structure
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, username, password=None, **extra_fields):
+    def create_user(self, username, password=None, role=None,**extra_fields):
         if not username:
             raise ValueError('The Username field is required.')
-        user = self.model(username=username, **extra_fields)
+        user = self.model(username=username,role=role, **extra_fields)
         if password:
             user.set_password(password)
         user.save(using=self._db)
@@ -20,7 +20,7 @@ class CustomUserManager(BaseUserManager):
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     class Meta:
-        db_table = 'auth_user'  # Be careful: this overrides Django's default table
+        db_table = 'CustomUser'  # Be careful: this overrides Django's default table
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username = models.CharField(max_length=30, unique=True, blank=True, null=True)
