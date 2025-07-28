@@ -88,7 +88,7 @@ DATABASES = {
     }
 }
 
-
+AUTH_USER_MODEL = 'user.CustomUser'
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -145,5 +145,5 @@ SIMPLE_JWT = {
 
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
-# settings.py
-AUTH_USER_MODEL = 'user.CustomUser'
+
+
