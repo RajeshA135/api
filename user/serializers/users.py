@@ -2,11 +2,9 @@ from ..models.users import CustomUser
 from ..models.roles import Role
 from rest_framework import serializers
 from .role import RoleSerializer
-
-
 class UserSerializer(serializers.ModelSerializer):
         role = RoleSerializer(read_only=True)
-        email_name = serializers.CharField(read_only=True)
+        email_name = serializers.CharField(read_only=True)           
         email_domain = serializers.SerializerMethodField(read_only=True)
         class Meta:
             model = CustomUser
