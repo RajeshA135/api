@@ -13,11 +13,13 @@ class UserSerializer(serializers.ModelSerializer):
             # depth = 1
         
         def get_email_name(self, obj):
-            return obj.email.split('@')[0]
-        
+            if obj.email:
+                return obj.email.split('@')[0]
+            return None
         def get_email_domain(self, obj):
-            return obj.email.split('@')[1]
-        
+            if obj.email:
+              return obj.email.split('@')[1]
+            return None
         def create(self, validated_data):
             # Use Django's built-in method to hash passwords
             user = CustomUser.objects.create_user(**validated_data)
