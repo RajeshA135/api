@@ -34,7 +34,7 @@ class OrganizationView(APIView):
         serializer = OrganizationSerializer(organization, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
-            return Response({"data": serializer.data,"message":"Product Updated Successfully"})
+            return Response({"data": serializer.data,"message":"Organization Updated Successfully"})
         return Response(serializer.errors, status=400)
     def put(self, request, pk):
             product = get_object_or_404(Organization, pk=pk, created_by=request.user)
@@ -43,7 +43,7 @@ class OrganizationView(APIView):
                 serializer.save(created_by=request.user)  # Reassign user for security
                 return Response({
                     "data": serializer.data,
-                    "message": "Entire Product details are updated successfully"
+                    "message": "Entire Organizaton details are updated successfully"
                 }, status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     def delete(self, request, pk):
@@ -53,6 +53,6 @@ class OrganizationView(APIView):
             return Response({"error": "Not found"}, status=404)
 
         product.delete()
-        return Response({"message": "Deleted successfully"}, status=204)
+        return Response({"message": "Organization Deleted successfully"}, status=204)
     
     
