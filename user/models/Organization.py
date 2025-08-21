@@ -1,5 +1,5 @@
+from django.conf import settings
 from django.db import models
-from ..models.users import CustomUser  # adjust import to your project
 
 class Organization(models.Model):
     id = models.AutoField(primary_key=True)
@@ -13,7 +13,7 @@ class Organization(models.Model):
         related_name='children'
     )
     created_by = models.ForeignKey(
-        CustomUser,
+        settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
