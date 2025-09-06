@@ -20,7 +20,7 @@ class SignupSerializer(serializers.ModelSerializer):
         role = validated_data.get('role')  # This should be a Role instance or ID
         user = CustomUser.objects.create_user(
             username=validated_data['username'],
-            email=validated_data.get('email'),
+            email=validated_data['email'],
             password=validated_data['password'],
             role=role  # Pass role here
         )

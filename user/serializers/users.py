@@ -1,38 +1,51 @@
-from ..models.users import CustomUser
-from ..models.roles import Role
 from rest_framework import serializers
-from .role import RoleSerializer
+from user.models.users import CustomUser
+from user.serializers.role import RoleSerializer
+
+
 class UserSerializer(serializers.ModelSerializer):
-    role = RoleSerializer(read_only=True)  # for displaying nested role details
+    role = RoleSerializer(read_only=True)  # show role details
     role_id = serializers.PrimaryKeyRelatedField(
-        queryset=Role.objects.all(),
-        source='role',
-        write_only=True
+        queryset=CustomUser._meta.get_field("role").remote_field.model.objects.all(),
+        source="role",
+        write_only=True,
+        required=False
     )
+
     email_name = serializers.SerializerMethodField(read_only=True)
     email_domain = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'email', 'password', 'is_staff', 'role', 'role_id', 'email_name', 'email_domain']
-        extra_kwargs = {'password': {'write_only': True}}
+        fields = [
+            "id",
+            "username",
+            "email",
+            "password",
+            "is_staff",
+            "role",
+            "role_id",
+            "email_name",
+            "email_domain",
+        ]
+        extra_kwargs = {"password": {"write_only": True}}
 
     def get_email_name(self, obj):
-        if obj.email:
-            return obj.email.split('@')[0]
-        return None
+        return obj.email.split("@")[0] if obj.email else None
 
     def get_email_domain(self, obj):
-        if obj.email:
-            return obj.email.split('@')[1]
-        return None
+        return obj.email.split("@")[1] if obj.email else None
 
     def create(self, validated_data):
-        user = CustomUser.objects.create_user(**validated_data)
+        password = validated_data.pop("password", None)
+        user = CustomUser(**validated_data)
+        if password:
+            user.set_password(password)
+        user.save()
         return user
 
     def update(self, instance, validated_data):
-        password = validated_data.pop('password', None)
+        password = validated_data.pop("password", None)
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         if password:
